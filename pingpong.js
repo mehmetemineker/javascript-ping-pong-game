@@ -243,35 +243,31 @@
         update();
     }
 
-    window.addEventListener("keydown", (ev) => {
-        if (STATE.IsStarted) {
-            switch (ev.code) {
-                case "ArrowUp": STATE.UpArrowPressed = true; break;
-                case "ArrowDown": STATE.DownArrowPressed = true; break;
-                case "KeyW": STATE.WPressed = true; break;
-                case "KeyS": STATE.SPressed = true; break;
-            }
-        }
-    });
+    function keyEvent(ev) {
+        let isPressed = ev.type === "keydown";
 
-    window.addEventListener("keyup", (ev) => {
         if (STATE.IsStarted) {
             switch (ev.code) {
-                case "ArrowUp": STATE.UpArrowPressed = false; break;
-                case "ArrowDown": STATE.DownArrowPressed = false; break;
-                case "KeyW": STATE.WPressed = false; break;
-                case "KeyS": STATE.SPressed = false; break;
+                case "ArrowUp": STATE.UpArrowPressed = isPressed; break;
+                case "ArrowDown": STATE.DownArrowPressed = isPressed; break;
+                case "KeyW": STATE.WPressed = isPressed; break;
+                case "KeyS": STATE.SPressed = isPressed; break;
             }
         }
 
-        if (ev.code === "Space") {
-            STATE.IsStarted = true;
-        }
+        if (!isPressed) {
+            if (ev.code === "Space") {
+                STATE.IsStarted = true;
+            }
 
-        if (ev.code === "Escape") {
-            resetState();
+            if (ev.code === "Escape") {
+                resetState();
+            }
         }
-    });
+    }
+
+    window.addEventListener("keydown", keyEvent);
+    window.addEventListener("keyup", keyEvent);
 
     setInterval(gameLoop, 1000 / 60);
 })();
